@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import processing.svg.*;
 
-final int SCREENWIDTH = 7680;
+final int SCREENWIDTH = 3840;
 final int SCREENHEIGHT = 2160;
 
 int FRAMES = 24;
@@ -25,8 +26,7 @@ int curId = 0;
 
 // Images file
 String imageDirPath = "ImageFrames";
-
-boolean TestMode = false;
+boolean TestMode = true;
 
 void setup(){
   size(3840, 2160);
@@ -41,19 +41,7 @@ void setup(){
   distantStars = new DistantStars(int(random(3000)));
   
   AnimationFrames = generateFrames(); 
-  
-  
-  // Save Frames as Images
-  
-  //File dir = new File("imageDirPath");
-  
-  //if(dir.exists()){
-  //  FileUtils.deleteDirectory(dir);
-  //}
     
-     saveAnimationImages(AnimationFrames);
-  
-  
 }
 
 
@@ -102,26 +90,7 @@ void GenerateStars(){
   }
 }
 
-void saveAnimationImages(ArrayList<PGraphics> animationFrames){
-  
-  if(animationFrames == null){
-    System.out.println("ERROR: Did not generate animation frames");
-    return; 
-  }
-  
-  for(int i = 0; i < animationFrames.size(); i++){
-    
-    PGraphics pg = animationFrames.get(i);
-    
-    String imagenumberprefix = "";
-    
-    for(int n = 0; n < (str(FRAMES).length() - str(i).length()) ; n++){
-      imagenumberprefix += "0";
-    }
-        
-    pg.save(imageDirPath +"/DW_Frame_" + imagenumberprefix + str(i) + ".png");
-   }
-}
+
 
 
 ArrayList<PGraphics> generateFrames(){
@@ -130,7 +99,13 @@ ArrayList<PGraphics> generateFrames(){
    
    for(int frameNumber = 0; frameNumber < FRAMES; frameNumber++){
      
-     PGraphics pg = createGraphics(SCREENWIDTH, SCREENHEIGHT);
+     String imagenumberprefix = "";
+    
+    for(int n = 0; n < (str(FRAMES).length() - str(frameNumber).length()) ; n++){
+      imagenumberprefix += "0";
+    }
+     
+     PGraphicsSVG pg = (PGraphicsSVG) createGraphics(SCREENWIDTH, SCREENHEIGHT, SVG, "ImageSVGFrames/Frame_" + imagenumberprefix + str(frameNumber)); //<>//
       
       pg.beginDraw();
       
@@ -146,6 +121,7 @@ ArrayList<PGraphics> generateFrames(){
         current_star.DrawStar(startuple.stage, pg);
       }
       
+      //pg.dispose(); //<>//
       pg.endDraw();
       
       animationFrames.add(pg);
@@ -153,3 +129,20 @@ ArrayList<PGraphics> generateFrames(){
     
     return animationFrames;
 }
+
+//void saveAnimationImages(){
+  
+//  if(AnimationFrames == null){ //<>//
+//    System.out.println("ERROR: Did not generate animation frames");
+//    return; 
+//  }
+  
+//  for(int i = 0; i < AnimationFrames.size(); i++){
+    
+//    PGraphicsSVG pg = (PGraphicsSVG) AnimationFrames.get(i);
+    
+    
+        
+//    pg.save("Frame_" + imagenumberprefix + str(i));
+//   }
+//}
